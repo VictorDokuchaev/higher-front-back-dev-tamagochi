@@ -1,9 +1,9 @@
 import os
 
 from game.models import Food, Medicine
-from game.tamagochi import AbstractTamagochi
-from game.clicker import AbstractClicker
-from game.game import AbstractGame
+from game.tamagochi import CatTamagochi
+from game.clicker import RandomClicker
+from game.game import ConsoleGame
 
 
 def main():
@@ -17,17 +17,9 @@ def main():
         Medicine(name='Ибупрофен', price=30, heal_hp=20, number_of_uses=2)
     ]
 
-    #  Вместо AbstractTamagochi импортируйте
-    #  и создайте инстанс от своей реализации
-    tamagochi = AbstractTamagochi()
-
-    #  Вместо AbstractClicker импортируйте
-    #  и создайте инстанс от своей реализации
-    clicker = AbstractClicker(10, 20)
-
-    #  Вместо AbstractGame импортируйте
-    #  и создайте инстанс от своей реализации
-    game = AbstractGame(
+    tamagochi = CatTamagochi()
+    clicker = RandomClicker(10, 20)
+    game = ConsoleGame(
         tamagochi,
         clicker,
         all_food=all_food,
