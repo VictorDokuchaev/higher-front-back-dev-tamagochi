@@ -77,7 +77,19 @@ class AbstractTamagochi(ABC):
 class CatTamagochi(AbstractTamagochi):
     """Кот тамагочи"""
     MIN_STAT = 0
-    MAX_STAT = 100  
+    MAX_STAT = 100
+
+    PLAY_HUNGER = 15
+    PLAY_ENERGY = 10
+
+    REST_ENERGY = 15
+    SICK_REST_ENERGY = 5
+
+    TICK_HUNGER = 3
+    TICK_ENERGY = 2
+
+    HP_LOSS = 1
+    SICK_HP_LOSS = 3
 
     HUNGER_THRESHOLD = 50
     ENERGY_THRESHOLD = 20
@@ -112,25 +124,17 @@ class CatTamagochi(AbstractTamagochi):
         self._change_attr("hunger", -food.satiety)
 
     def play(self) -> None:
-        """
-        Начинает игру с тамагочи.
-        Отнимает 10 энергии
-        Добавляет 15 голода
-        """
-        self._change_attr("hunger", 15)
-        self._change_attr("energy", -10)
+        """Играет с тамагочи: растит голод и тратит энергию"""
+        self._change_attr("hunger", self.PLAY_HUNGER)
+        self._change_attr("energy", -self.PLAY_ENERGY)
 
     def rest(self) -> None:
-        """
-        Отдых тамагочи,
-        если здоров, то +15 энергии,
-        если болен, то +5 энергии
-        """
+        """Восстанавливает энергию, при болезни — слабее"""
         if self.is_sick():
-            self._change_attr("energy", 5)
+            self._change_attr("energy", self.SICK_REST_ENERGY)
             return
 
-        self._change_attr("energy", 15)
+        self._change_attr("energy", self.REST_ENERGY)
 
     def heal(self, medicine: Medicine) -> None:
         """Использует медицину для лечения"""
@@ -147,7 +151,7 @@ class CatTamagochi(AbstractTamagochi):
 
     def is_alive(self) -> bool:
         """Проверяет, жив ли тамагочи"""
-        return self.hp > 0
+        return self.hp > self.MIN_STAT
 
     def is_sick(self) -> bool:
         """Проверяет наличие болезней у тамагочи"""
@@ -158,20 +162,15 @@ class CatTamagochi(AbstractTamagochi):
 
     def update(self) -> None:
         """Обновляет состояние тамагочи"""
+        hp_loss = self.SICK_HP_LOSS if self.is_sick() else self.HP_LOSS
         if self.energy < self.ENERGY_THRESHOLD:
-            if self.is_sick():
-                self._change_attr("hp", -3)
-            else:
-                self._change_attr("hp", -1)
+            self._change_attr("hp", -hp_loss)
         if self.hunger > self.HUNGER_THRESHOLD:
-            if self.is_sick():
-                self._change_attr("hp", -3)
-            else:
-                self._change_attr("hp", -1)
+            self._change_attr("hp", -hp_loss)
 
-        self._change_attr("hunger", 3)
-        self._change_attr("energy", -2)
-        
+        self._change_attr("hunger", self.TICK_HUNGER)
+        self._change_attr("energy", -self.TICK_ENERGY)
+
     def _change_attr(self, attr: str, delta: int) -> None:
         """
         Изменить указанный атрибут на дельта
