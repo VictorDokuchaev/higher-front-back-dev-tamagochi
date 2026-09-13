@@ -76,6 +76,7 @@ class AbstractTamagochi(ABC):
 
 class CatTamagochi(AbstractTamagochi):
     """Кот тамагочи"""
+
     MIN_STAT = 0
     MAX_STAT = 100
 
@@ -107,17 +108,23 @@ class CatTamagochi(AbstractTamagochi):
         if self.MIN_STAT < hp <= self.MAX_STAT:
             self.hp = hp
         else:
-            raise IncorrectHp(f'Need {self.MIN_STAT} < hp <= {self.MAX_STAT}')
-        
+            raise IncorrectHp(
+                f'Need {self.MIN_STAT} < hp <= {self.MAX_STAT}'
+            )
+
         if self.MIN_STAT <= energy <= self.MAX_STAT:
             self.energy = energy
         else:
-            raise IncorrectEnergy(f'Need {self.MIN_STAT} <= energy <= {self.MAX_STAT}')
-        
+            raise IncorrectEnergy(
+                f'Need {self.MIN_STAT} <= energy <= {self.MAX_STAT}'
+            )
+
         if self.MIN_STAT <= hunger <= self.MAX_STAT:
             self.hunger = hunger
         else:
-            raise IncorrectHunger(f'Need {self.MIN_STAT} <= hunger <= {self.MAX_STAT}')
+            raise IncorrectHunger(
+                f'Need {self.MIN_STAT} <= hunger <= {self.MAX_STAT}'
+            )
 
     def feed(self, food: Food) -> None:
         """Кормит тамагочи"""

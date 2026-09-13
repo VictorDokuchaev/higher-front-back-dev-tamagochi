@@ -7,6 +7,7 @@ from game.game import ConsoleGame
 
 
 def main():
+    """Запускает консольный цикл тамагочи-кликера"""
     all_food = [
         Food(name='Бургер', satiety=20, price=40),
         Food(name='Салат', satiety=10, price=20),

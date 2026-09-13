@@ -34,7 +34,10 @@ class RandomClicker(AbstractClicker):
 
     def click(self) -> None:
         """Бросает случайный доход в заданном диапазоне"""
-        self._last_income = random.randint(self.min_per_click, self.max_per_click)
+        self._last_income = random.randint(
+            self.min_per_click,
+            self.max_per_click,
+        )
 
     @property
     def income_per_click(self) -> int:
