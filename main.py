@@ -1,4 +1,4 @@
-import os
+import subprocess
 
 from game.clicker import RandomClicker
 from game.exceptions import TamagochiIsGone
@@ -54,22 +54,17 @@ def main():
         print("7. Отдых")
         print("0. Выход")
 
-        match input("Выберите действие: "):
+        action = input("Выберите действие: ")
+        match action:
             case "1":
                 income = game.work()
                 output = f'Вы заработали {income} монет'
-                try:
-                    game.tamagochi.update()
-                except TamagochiIsGone as error:
-                    print(error)
-                    break
             case "2":
                 game.buy_food()
             case "3":
                 game.buy_medicine()
             case "4":
                 game.feed_tamagochi()
-
             case "5":
                 game.heal_tamagochi()
             case "6":
@@ -83,7 +78,14 @@ def main():
             case _:
                 output = "Неверная команда"
 
-        os.system('clear')
+        if action in {"1", "2", "3", "4", "5", "6", "7"}:
+            try:
+                game.tamagochi.update()
+            except TamagochiIsGone as error:
+                print(error)
+                break
+
+        subprocess.run(["clear"], check=False)
 
 
 if __name__ == "__main__":
