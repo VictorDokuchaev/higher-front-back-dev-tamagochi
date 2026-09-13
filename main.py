@@ -7,7 +7,7 @@ from game.models import Food, Medicine
 from game.tamagochi import CatTamagochi
 
 
-def main():
+def main() -> None:
     """Запускает консольный цикл тамагочи-кликера"""
     all_food = [
         Food(name='Бургер', satiety=20, price=40),

@@ -109,7 +109,17 @@ class CatTamagochi(AbstractTamagochi):
         energy: int = MAX_STAT,
         hunger: int = MIN_STAT,
     ) -> None:
-        """Устанавливает начальные настройки тамагочи"""
+        """
+        Устанавливает начальные настройки тамагочи
+
+        :param hp: начальное здоровье
+        :param energy: начальная энергия
+        :param hunger: начальный голод
+        :return: None
+        :raises IncorrectHp: если здоровье вне допустимого диапазона
+        :raises IncorrectEnergy: если энергия вне допустимого диапазона
+        :raises IncorrectHunger: если голод вне допустимого диапазона
+        """
         if self.MIN_STAT < hp <= self.MAX_STAT:
             self.hp = hp
         else:
@@ -134,16 +144,29 @@ class CatTamagochi(AbstractTamagochi):
         self._sick = False
 
     def feed(self, food: Food) -> None:
-        """Кормит тамагочи"""
+        """
+        Кормит тамагочи выбранной едой
+
+        :param food: еда, которой кормят питомца
+        :return: None
+        """
         self._change_attr("hunger", -food.satiety)
 
     def play(self) -> None:
-        """Играет с тамагочи: растит голод и тратит энергию"""
+        """
+        Играет с тамагочи: растит голод и тратит энергию
+
+        :return: None
+        """
         self._change_attr("hunger", self.PLAY_HUNGER)
         self._change_attr("energy", -self.PLAY_ENERGY)
 
     def rest(self) -> None:
-        """Восстанавливает энергию, при болезни — слабее"""
+        """
+        Восстанавливает энергию, при болезни — слабее
+
+        :return: None
+        """
         if self.is_sick():
             self._change_attr("energy", self.SICK_REST_ENERGY)
             return
@@ -151,13 +174,22 @@ class CatTamagochi(AbstractTamagochi):
         self._change_attr("energy", self.REST_ENERGY)
 
     def heal(self, medicine: Medicine) -> None:
-        """Лечит здоровье и снимает болезнь"""
+        """
+        Лечит здоровье и снимает болезнь
+
+        :param medicine: лекарство для лечения
+        :return: None
+        """
         self._change_attr("hp", medicine.heal_hp)
         self._sick = False
 
     @property
     def status(self) -> dict[str, int]:
-        """Возвращает все состояния тамагочи"""
+        """
+        Возвращает все состояния тамагочи
+
+        :return: словарь с ключами hp, energy, hunger
+        """
         return {
             "hp": self.hp,
             "energy": self.energy,
@@ -165,15 +197,28 @@ class CatTamagochi(AbstractTamagochi):
         }
 
     def is_alive(self) -> bool:
-        """Проверяет, жив ли тамагочи"""
+        """
+        Проверяет, жив ли тамагочи
+
+        :return: True если жив, иначе False
+        """
         return self.hp > self.MIN_STAT
 
     def is_sick(self) -> bool:
-        """Проверяет наличие болезней у тамагочи"""
+        """
+        Проверяет наличие болезней у тамагочи
+
+        :return: True если болеет, иначе False
+        """
         return self._sick
 
     def update(self) -> None:
-        """Обновляет состояние тамагочи"""
+        """
+        Обновляет состояние тамагочи за один тик
+
+        :return: None
+        :raises TamagochiIsGone: если здоровье упало до нуля
+        """
         hp_loss = self.SICK_HP_LOSS if self.is_sick() else self.HP_LOSS
         if self.energy < self.ENERGY_THRESHOLD:
             self._change_attr("hp", -hp_loss)
@@ -191,8 +236,11 @@ class CatTamagochi(AbstractTamagochi):
 
     def _change_attr(self, attr: str, delta: int) -> None:
         """
-        Изменить указанный атрибут на дельта
-        с учётом ограничений
+        Изменяет указанный атрибут на дельту с учётом ограничений
+
+        :param attr: имя характеристики
+        :param delta: на сколько изменить значение
+        :return: None
         """
         setattr(
             self,

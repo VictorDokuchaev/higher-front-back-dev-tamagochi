@@ -110,6 +110,15 @@ class ConsoleGame(AbstractGame):
         all_food: list[Food],
         all_medicine: list[Medicine],
     ) -> None:
+        """
+        Инициализирует игру, витрину, сумки и кошелёк
+
+        :param tamagochi: экземпляр тамагочи
+        :param clicker: экземпляр кликера
+        :param all_food: витрина еды
+        :param all_medicine: витрина лекарств
+        :return: None
+        """
         self.tamagochi = tamagochi
         self.clicker = clicker
         self.all_food = all_food
@@ -120,33 +129,57 @@ class ConsoleGame(AbstractGame):
 
     @property
     def food(self) -> list[Food]:
-        """Сумка с купленной едой"""
+        """
+        Сумка с купленной едой
+
+        :return: список купленной еды
+        """
         return self._food
 
     @property
     def medicine(self) -> list[Medicine]:
-        """Сумка с купленными лекарствами"""
+        """
+        Сумка с купленными лекарствами
+
+        :return: список купленных лекарств
+        """
         return self._medicine
 
     def work(self) -> int:
-        """Работа для заработка монет"""
+        """
+        Зарабатывает монеты через кликер
+
+        :return: количество заработанных монет
+        """
         self.clicker.click()
         income = self.clicker.income_per_click
         self.coins += income
         return income
 
     def buy_food(self) -> None:
-        """Купить еду"""
+        """
+        Покупает еду с витрины и кладёт её в сумку
+
+        :return: None
+        """
         self._show_catalog(self.all_food, "Еды нет")
         self._buy(self._food, self.all_food)
 
     def buy_medicine(self) -> None:
-        """Купить лекарства"""
+        """
+        Покупает лекарство с витрины и кладёт его в сумку
+
+        :return: None
+        """
         self._show_catalog(self.all_medicine, "Лекарств нет")
         self._buy(self._medicine, self.all_medicine)
 
     def feed_tamagochi(self) -> None:
-        """Покормить тамагочи"""
+        """
+        Кормит тамагочи едой из сумки
+
+        :return: None
+        """
         self._show_catalog(self._food, "Еды нет")
         index = self._ask_index(self._food)
         if index is None:
@@ -156,7 +189,11 @@ class ConsoleGame(AbstractGame):
         self.tamagochi.feed(food)
 
     def heal_tamagochi(self) -> None:
-        """Лечить тамагочи"""
+        """
+        Лечит тамагочи лекарством из сумки
+
+        :return: None
+        """
         self._show_catalog(self._medicine, "Лекарств нет")
         index = self._ask_index(self._medicine)
         if index is None:
@@ -168,16 +205,28 @@ class ConsoleGame(AbstractGame):
         if medicine.is_empty():
             self._medicine.pop(index)
 
-    def rest_tamagochi(self):
-        """Дать отдых тамагочи"""
+    def rest_tamagochi(self) -> None:
+        """
+        Даёт тамагочи отдохнуть
+
+        :return: None
+        """
         self.tamagochi.rest()
 
-    def play_with_tamagochi(self):
-        """Играть с тамагочи"""
+    def play_with_tamagochi(self) -> None:
+        """
+        Играет с тамагочи
+
+        :return: None
+        """
         self.tamagochi.play()
 
     def get_status(self) -> dict[str, Any]:
-        """Получить все характеристики тамагочи"""
+        """
+        Возвращает характеристики тамагочи и число монет
+
+        :return: словарь с hunger, hp, energy и coins
+        """
         return {
             **self.tamagochi.status,
             "coins": self.coins
@@ -188,6 +237,13 @@ class ConsoleGame(AbstractGame):
         catalog: list[Food] | list[Medicine],
         empty_message: str,
     ) -> None:
+        """
+        Печатает каталог или сообщение, если он пуст
+
+        :param catalog: список товаров для показа
+        :param empty_message: текст, если список пустой
+        :return: None
+        """
         if catalog:
             for index, product in enumerate(catalog):
                 print(f"{index + 1}: {product}")
@@ -200,6 +256,14 @@ class ConsoleGame(AbstractGame):
         bag: list[Food] | list[Medicine],
         catalog: list[Food] | list[Medicine],
     ) -> None:
+        """
+        Покупает товар с витрины и кладёт копию в сумку
+
+        :param bag: сумка игрока
+        :param catalog: витрина товаров
+        :return: None
+        :raises NotEnoughMoney: если не хватает монет, ошибка ловится внутри
+        """
         while True:
             product_index = self._ask_index(catalog)
             if product_index is None:
@@ -222,6 +286,12 @@ class ConsoleGame(AbstractGame):
             return
 
     def _ask_index(self, catalog: list[Food] | list[Medicine]) -> int | None:
+        """
+        Спрашивает номер товара в каталоге
+
+        :param catalog: список, из которого выбирают
+        :return: индекс товара или None при отмене
+        """
         while True:
             number = self._get_number()
 
@@ -236,6 +306,11 @@ class ConsoleGame(AbstractGame):
             return index
 
     def _get_number(self) -> int:
+        """
+        Читает неотрицательное целое число из ввода
+
+        :return: введённое число
+        """
         while True:
             number = input("Введите: ")
             if number.isdigit():
