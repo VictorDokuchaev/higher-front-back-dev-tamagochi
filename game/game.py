@@ -3,9 +3,10 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from .tamagochi import AbstractTamagochi
-from .clicker import AbstractClicker
-from .models import Food, Medicine
+from game.clicker import AbstractClicker
+from game.models import Food, Medicine
+from game.tamagochi import AbstractTamagochi
+
 
 
 class AbstractGame(ABC):
