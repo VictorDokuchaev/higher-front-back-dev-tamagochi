@@ -78,7 +78,7 @@ def main():
             case _:
                 output = "Неверная команда"
 
-        if action in {"1", "2", "3", "4", "5", "6", "7"}:
+        if action in {"1", "6", "7"}:
             try:
                 game.tamagochi.update()
             except TamagochiIsGone as error:
