@@ -146,15 +146,44 @@ class ConsoleGame(AbstractGame):
 
     def feed_tamagochi(self) -> None:
         """Покормить тамагочи"""
+        if len(self._food) == 0:
+            print("Еды нет")
+            return
+
+        self._show_catalog(self._food)
+        index = self._ask_index(self._food)
+        if index is None:
+            print("Кормление отменено")
+            return
+
+        food = self._food.pop(index)
+        self.tamagochi.feed(food)
 
     def heal_tamagochi(self) -> None:
         """Лечить тамагочи"""
+        if len(self._medicine) == 0:
+            print("Лекарств нет")
+            return
+
+        self._show_catalog(self._medicine)
+        index = self._ask_index(self._medicine)
+        if index is None:
+            print("Лечение отменено")
+            return
+
+        medicine = self._medicine[index]
+        self.tamagochi.heal(medicine)
+        medicine.uses += 1
+        if medicine.is_empty():
+            self._medicine.pop(index)
 
     def rest_tamagochi(self):
         """Дать отдых тамагочи"""
+        self.tamagochi.rest()
 
     def play_with_tamagochi(self):
         """Играть с тамагочи"""
+        self.tamagochi.play()
 
     def get_status(self) -> dict[str, Any]:
         """Получить все характеристики тамагочи"""
@@ -167,27 +196,16 @@ class ConsoleGame(AbstractGame):
         for index, product in enumerate(catalog):
             print(f"{index + 1}: {product}")
 
-    def _get_number(self) -> int:
-        while True:
-            number = input("Введите: ")
-            if number.isdigit():
-                return int(number)
-
     def _buy(
         self,
         bag: list[Food] | list[Medicine],
         catalog: list[Food] | list[Medicine],
     ) -> None:
         while True:
-            number = self._get_number()
-            if number == 0:
+            product_index = self._ask_index(catalog)
+            if product_index is None:
                 print("Покупка отменена")
                 return
-
-            product_index = number - 1
-            if len(catalog) <= product_index:
-                print("Неверный номер")
-                continue
 
             product = copy.copy(catalog[product_index])
             if self.coins < product.price:
@@ -198,3 +216,23 @@ class ConsoleGame(AbstractGame):
             bag.append(product)
             print(f"Куплен {product.name}. На балансе: {self.coins}")
             return
+
+    def _ask_index(self, catalog: list[Food] | list[Medicine]) -> int | None:
+        while True:
+            number = self._get_number()
+
+            if number == 0:
+                return None
+
+            index = number - 1
+            if len(catalog) <= index:
+                print("Неверный номер")
+                continue
+
+            return index
+
+    def _get_number(self) -> int:
+        while True:
+            number = input("Введите: ")
+            if number.isdigit():
+                return int(number)
