@@ -61,12 +61,12 @@ class AbstractGame(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def rest_tamagochi(self):
+    def rest_tamagochi(self) -> None:
         """Абстрактный метод для отдыха тамагочи"""
         raise NotImplementedError
 
     @abstractmethod
-    def play_with_tamagochi(self):
+    def play_with_tamagochi(self) -> None:
         """Абстрактный метод для игры с тамагочи"""
         raise NotImplementedError
 
