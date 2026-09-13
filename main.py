@@ -1,9 +1,10 @@
 import os
 
+from game.clicker import RandomClicker
+from game.exceptions import TamagochiIsGone
+from game.game import ConsoleGame
 from game.models import Food, Medicine
 from game.tamagochi import CatTamagochi
-from game.clicker import RandomClicker
-from game.game import ConsoleGame
 
 
 def main():
@@ -57,7 +58,11 @@ def main():
             case "1":
                 income = game.work()
                 output = f'Вы заработали {income} монет'
-                game.tamagochi.update()
+                try:
+                    game.tamagochi.update()
+                except TamagochiIsGone as error:
+                    print(error)
+                    break
             case "2":
                 game.buy_food()
             case "3":

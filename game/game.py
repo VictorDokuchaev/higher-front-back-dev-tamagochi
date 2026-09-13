@@ -5,6 +5,7 @@ import copy
 from typing import Any
 
 from game.clicker import AbstractClicker
+from game.exceptions import NotEnoughMoney
 from game.models import Food, Medicine
 from game.tamagochi import AbstractTamagochi
 
@@ -208,8 +209,13 @@ class ConsoleGame(AbstractGame):
                 return
 
             product = copy.copy(catalog[product_index])
-            if self.coins < product.price:
-                print("Недостаточно средств для покупки")
+            try:
+                if self.coins < product.price:
+                    raise NotEnoughMoney(
+                        "Недостаточно средств для покупки"
+                    )
+            except NotEnoughMoney as error:
+                print(error)
                 continue
 
             self.coins -= product.price

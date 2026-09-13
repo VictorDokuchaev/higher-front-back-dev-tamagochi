@@ -2,7 +2,12 @@
 
 from abc import ABC, abstractmethod
 
-from game.exceptions import IncorrectEnergy, IncorrectHp, IncorrectHunger
+from game.exceptions import (
+    IncorrectEnergy,
+    IncorrectHp,
+    IncorrectHunger,
+    TamagochiIsGone,
+)
 from game.models import Food, Medicine
 
 
@@ -177,6 +182,9 @@ class CatTamagochi(AbstractTamagochi):
 
         self._change_attr("hunger", self.TICK_HUNGER)
         self._change_attr("energy", -self.TICK_ENERGY)
+
+        if not self.is_alive():
+            raise TamagochiIsGone("Тамагочи погиб")
 
     def _change_attr(self, attr: str, delta: int) -> None:
         """
