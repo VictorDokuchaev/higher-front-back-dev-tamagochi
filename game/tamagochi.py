@@ -131,6 +131,8 @@ class CatTamagochi(AbstractTamagochi):
                 f'Need {self.MIN_STAT} <= hunger <= {self.MAX_STAT}'
             )
 
+        self._sick = False
+
     def feed(self, food: Food) -> None:
         """Кормит тамагочи"""
         self._change_attr("hunger", -food.satiety)
@@ -149,8 +151,9 @@ class CatTamagochi(AbstractTamagochi):
         self._change_attr("energy", self.REST_ENERGY)
 
     def heal(self, medicine: Medicine) -> None:
-        """Использует медицину для лечения"""
+        """Лечит здоровье и снимает болезнь"""
         self._change_attr("hp", medicine.heal_hp)
+        self._sick = False
 
     @property
     def status(self) -> dict[str, int]:
@@ -167,10 +170,7 @@ class CatTamagochi(AbstractTamagochi):
 
     def is_sick(self) -> bool:
         """Проверяет наличие болезней у тамагочи"""
-        if self.hunger > self.SICK_HUNGER or self.hp < self.SICK_HP:
-            return True
-
-        return False
+        return self._sick
 
     def update(self) -> None:
         """Обновляет состояние тамагочи"""
@@ -182,6 +182,9 @@ class CatTamagochi(AbstractTamagochi):
 
         self._change_attr("hunger", self.TICK_HUNGER)
         self._change_attr("energy", -self.TICK_ENERGY)
+
+        if self.hunger > self.SICK_HUNGER or self.hp < self.SICK_HP:
+            self._sick = True
 
         if not self.is_alive():
             raise TamagochiIsGone("Тамагочи погиб")
