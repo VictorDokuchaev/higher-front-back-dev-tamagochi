@@ -137,24 +137,19 @@ class ConsoleGame(AbstractGame):
 
     def buy_food(self) -> None:
         """Купить еду"""
-        self._show_catalog(self.all_food)
+        self._show_catalog(self.all_food, "Еды нет")
         self._buy(self._food, self.all_food)
 
     def buy_medicine(self) -> None:
         """Купить лекарства"""
-        self._show_catalog(self.all_medicine)
+        self._show_catalog(self.all_medicine, "Лекарств нет")
         self._buy(self._medicine, self.all_medicine)
 
     def feed_tamagochi(self) -> None:
         """Покормить тамагочи"""
-        if len(self._food) == 0:
-            print("Еды нет")
-            return
-
-        self._show_catalog(self._food)
+        self._show_catalog(self._food, "Еды нет")
         index = self._ask_index(self._food)
         if index is None:
-            print("Кормление отменено")
             return
 
         food = self._food.pop(index)
@@ -162,14 +157,9 @@ class ConsoleGame(AbstractGame):
 
     def heal_tamagochi(self) -> None:
         """Лечить тамагочи"""
-        if len(self._medicine) == 0:
-            print("Лекарств нет")
-            return
-
-        self._show_catalog(self._medicine)
+        self._show_catalog(self._medicine, "Лекарств нет")
         index = self._ask_index(self._medicine)
         if index is None:
-            print("Лечение отменено")
             return
 
         medicine = self._medicine[index]
@@ -193,9 +183,17 @@ class ConsoleGame(AbstractGame):
             "coins": self.coins
         }
 
-    def _show_catalog(self, catalog: list[Food] | list[Medicine]) -> None:
-        for index, product in enumerate(catalog):
-            print(f"{index + 1}: {product}")
+    def _show_catalog(
+        self,
+        catalog: list[Food] | list[Medicine],
+        empty_message: str,
+    ) -> None:
+        if catalog:
+            for index, product in enumerate(catalog):
+                print(f"{index + 1}: {product}")
+        else:
+            print(empty_message)
+        print("0: Выход")
 
     def _buy(
         self,
