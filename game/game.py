@@ -257,7 +257,7 @@ class ConsoleGame(AbstractGame):
         catalog: list[Food] | list[Medicine],
     ) -> None:
         """
-        Покупает товар с витрины и кладёт копию в сумку
+        Покупает товар с витрины и кладёт глубокую копию в сумку
 
         :param bag: сумка игрока
         :param catalog: витрина товаров
@@ -270,7 +270,7 @@ class ConsoleGame(AbstractGame):
                 print("Покупка отменена")
                 return
 
-            product = copy.copy(catalog[product_index])
+            product = copy.deepcopy(catalog[product_index])
             try:
                 if self.coins < product.price:
                     raise NotEnoughMoney(
