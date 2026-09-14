@@ -6,6 +6,33 @@ from game.game import ConsoleGame
 from game.models import Food, Medicine
 from game.tamagochi import CatTamagochi
 
+STATUS_TEMPLATE = (
+    "Статус: голод {hunger}, здоровье {hp}, "
+    "энергия {energy}, монет {coins}"
+)
+BAGS_TEMPLATE = (
+    "Сумка с едой: {food}\n"
+    "Сумка с лекарствами: {medicine}"
+)
+SICK_MESSAGE = "\n".join(
+    (
+        "=======Тамагочи болеет======",
+        "=======Отдых действует менее эффективно=======",
+    )
+)
+MENU = "\n".join(
+    (
+        "1. Пойти на работу",
+        "2. Купить еду",
+        "3. Купить лекарство",
+        "4. Покормить",
+        "5. Вылечить",
+        "6. Играть",
+        "7. Отдых",
+        "0. Выход",
+    )
+)
+
 
 def main() -> None:
     """Запускает консольный цикл тамагочи-кликера"""
@@ -32,27 +59,17 @@ def main() -> None:
     output = ''
 
     while True:
-        print(output)
-
-        print(f"Сумка с едой: {game.food}")
-        print(f"Сумка с лекарствами: {game.medicine}")
-
-        status = game.get_status()
-        print(
-            f"\nСтатус: голод {status['hunger']}, здоровье {status['hp']}, "
-            f"энергия {status['energy']}, монет {status['coins']}\n"
-        )
+        lines = [
+            output,
+            BAGS_TEMPLATE.format(food=game.food, medicine=game.medicine),
+            "",
+            STATUS_TEMPLATE.format(**game.get_status()),
+            "",
+        ]
         if game.tamagochi.is_sick():
-            print("=======Тамагочи болеет======")
-            print("=======Отдых действует менее эффективно=======")
-        print("1. Пойти на работу")
-        print("2. Купить еду")
-        print("3. Купить лекарство")
-        print("4. Покормить")
-        print("5. Вылечить")
-        print("6. Играть")
-        print("7. Отдых")
-        print("0. Выход")
+            lines.append(SICK_MESSAGE)
+        lines.append(MENU)
+        print("\n".join(lines))
 
         action = input("Выберите действие: ")
         match action:
