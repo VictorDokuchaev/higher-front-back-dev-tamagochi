@@ -1,4 +1,4 @@
-"""Модуль с интерфейсом и реализацией класса игры"""
+"""Модуль с интерфейсом и реализацией класса игры."""
 
 from abc import ABC, abstractmethod
 import copy
@@ -11,7 +11,7 @@ from game.tamagochi import AbstractTamagochi
 
 
 class AbstractGame(ABC):
-    """Интерфейс для логики игры"""
+    """Интерфейс для логики игры."""
 
     @abstractmethod
     def __init__(
@@ -21,87 +21,82 @@ class AbstractGame(ABC):
         all_food: list[Food],
         all_medicine: list[Medicine]
     ):
-        """
-        Абстрактный метод инициализации класса игры
+        """Абстрактный метод инициализации класса игры.
 
-        :param tamagochi: экземпляр тамагочи
-        :param clicker: экземпляр кликера
-        :param all_food: все доступные варианты еды
-        :param all_medicine: все доступные варианты лекарств
+        :param tamagochi: экземпляр тамагочи.
+        :param clicker: экземпляр кликера.
+        :param all_food: все доступные варианты еды.
+        :param all_medicine: все доступные варианты лекарств.
         """
         raise NotImplementedError
 
     @abstractmethod
     def work(self) -> int:
-        """
-        Абстрактный метод для логики действия "работа
+        """Абстрактный метод для логики действия "работа".
 
-        :return: количество заработанных монет
+        :return: количество заработанных монет.
         """
         raise NotImplementedError
 
     @abstractmethod
     def buy_food(self) -> None:
-        """Абстрактный метод для покупки еды"""
+        """Абстрактный метод для покупки еды."""
         raise NotImplementedError
 
     @abstractmethod
     def buy_medicine(self) -> None:
-        """Абстрактный метод для покупки лекарства"""
+        """Абстрактный метод для покупки лекарства."""
         raise NotImplementedError
 
     @abstractmethod
     def feed_tamagochi(self) -> None:
-        """Абстрактный метод для кормления тамагочи"""
+        """Абстрактный метод для кормления тамагочи."""
         raise NotImplementedError
 
     @abstractmethod
     def heal_tamagochi(self) -> None:
-        """Абстрактный метод для лечения тамагочи"""
+        """Абстрактный метод для лечения тамагочи."""
         raise NotImplementedError
 
     @abstractmethod
     def rest_tamagochi(self) -> None:
-        """Абстрактный метод для отдыха тамагочи"""
+        """Абстрактный метод для отдыха тамагочи."""
         raise NotImplementedError
 
     @abstractmethod
     def play_with_tamagochi(self) -> None:
-        """Абстрактный метод для игры с тамагочи"""
+        """Абстрактный метод для игры с тамагочи."""
         raise NotImplementedError
 
     @abstractmethod
     def get_status(self) -> dict[str, Any]:
-        """
-        Абстрактный метод для получения статуса (всех характеристик) тамагочи
+        """Абстрактный метод для получения статуса тамагочи.
 
-        :return: словарь со всеми характеристиками тамагочи
+        :return: словарь со всеми характеристиками тамагочи.
         """
         raise NotImplementedError
 
     @property
     @abstractmethod
     def food(self) -> list[Food]:
-        """
-        Абстрактное свойство для доступа к сумке с едой
+        """Абстрактное свойство для доступа к сумке с едой.
 
-        :return: список с имеющимися (купленными) объектами еды
+        :return: список с имеющимися (купленными) объектами еды.
         """
         raise NotImplementedError
 
     @property
     @abstractmethod
     def medicine(self) -> list[Medicine]:
-        """
-        Абстрактное свойство для доступа к сумке с лекарствами
+        """Абстрактное свойство для доступа к сумке с лекарствами.
 
-        :return: список с имеющимися (купленными) объектами лекарств
+        :return: список с имеющимися (купленными) объектами лекарств.
         """
         raise NotImplementedError
 
 
 class ConsoleGame(AbstractGame):
-    """Игра через консоль"""
+    """Игра через консоль."""
 
     def __init__(
         self,
@@ -110,14 +105,13 @@ class ConsoleGame(AbstractGame):
         all_food: list[Food],
         all_medicine: list[Medicine],
     ) -> None:
-        """
-        Инициализирует игру, витрину, сумки и кошелёк
+        """Инициализирует игру, витрину, сумки и кошелёк.
 
-        :param tamagochi: экземпляр тамагочи
-        :param clicker: экземпляр кликера
-        :param all_food: витрина еды
-        :param all_medicine: витрина лекарств
-        :return: None
+        :param tamagochi: экземпляр тамагочи.
+        :param clicker: экземпляр кликера.
+        :param all_food: витрина еды.
+        :param all_medicine: витрина лекарств.
+        :return: None.
         """
         self.tamagochi = tamagochi
         self.clicker = clicker
@@ -129,27 +123,24 @@ class ConsoleGame(AbstractGame):
 
     @property
     def food(self) -> list[Food]:
-        """
-        Сумка с купленной едой
+        """Сумка с купленной едой.
 
-        :return: список купленной еды
+        :return: список купленной еды.
         """
         return self._food
 
     @property
     def medicine(self) -> list[Medicine]:
-        """
-        Сумка с купленными лекарствами
+        """Сумка с купленными лекарствами.
 
-        :return: список купленных лекарств
+        :return: список купленных лекарств.
         """
         return self._medicine
 
     def work(self) -> int:
-        """
-        Зарабатывает монеты через кликер
+        """Зарабатывает монеты через кликер.
 
-        :return: количество заработанных монет
+        :return: количество заработанных монет.
         """
         self.clicker.click()
         income = self.clicker.income_per_click
@@ -157,28 +148,25 @@ class ConsoleGame(AbstractGame):
         return income
 
     def buy_food(self) -> None:
-        """
-        Покупает еду с витрины и кладёт её в сумку
+        """Покупает еду с витрины и кладёт её в сумку.
 
-        :return: None
+        :return: None.
         """
         self._show_catalog(self.all_food, "Еды нет")
         self._buy(self._food, self.all_food)
 
     def buy_medicine(self) -> None:
-        """
-        Покупает лекарство с витрины и кладёт его в сумку
+        """Покупает лекарство с витрины и кладёт его в сумку.
 
-        :return: None
+        :return: None.
         """
         self._show_catalog(self.all_medicine, "Лекарств нет")
         self._buy(self._medicine, self.all_medicine)
 
     def feed_tamagochi(self) -> None:
-        """
-        Кормит тамагочи едой из сумки
+        """Кормит тамагочи едой из сумки.
 
-        :return: None
+        :return: None.
         """
         self._show_catalog(self._food, "Еды нет")
         index = self._ask_index(self._food)
@@ -189,10 +177,9 @@ class ConsoleGame(AbstractGame):
         self.tamagochi.feed(food)
 
     def heal_tamagochi(self) -> None:
-        """
-        Лечит тамагочи лекарством из сумки
+        """Лечит тамагочи лекарством из сумки.
 
-        :return: None
+        :return: None.
         """
         self._show_catalog(self._medicine, "Лекарств нет")
         index = self._ask_index(self._medicine)
@@ -206,26 +193,23 @@ class ConsoleGame(AbstractGame):
             self._medicine.pop(index)
 
     def rest_tamagochi(self) -> None:
-        """
-        Даёт тамагочи отдохнуть
+        """Даёт тамагочи отдохнуть.
 
-        :return: None
+        :return: None.
         """
         self.tamagochi.rest()
 
     def play_with_tamagochi(self) -> None:
-        """
-        Играет с тамагочи
+        """Играет с тамагочи.
 
-        :return: None
+        :return: None.
         """
         self.tamagochi.play()
 
     def get_status(self) -> dict[str, Any]:
-        """
-        Возвращает характеристики тамагочи и число монет
+        """Возвращает характеристики тамагочи и число монет.
 
-        :return: словарь с hunger, hp, energy и coins
+        :return: словарь с hunger, hp, energy и coins.
         """
         return {
             **self.tamagochi.status,
@@ -237,12 +221,11 @@ class ConsoleGame(AbstractGame):
         catalog: list[Food] | list[Medicine],
         empty_message: str,
     ) -> None:
-        """
-        Печатает каталог или сообщение, если он пуст
+        """Печатает каталог или сообщение, если он пуст.
 
-        :param catalog: список товаров для показа
-        :param empty_message: текст, если список пустой
-        :return: None
+        :param catalog: список товаров для показа.
+        :param empty_message: текст, если список пустой.
+        :return: None.
         """
         if catalog:
             for index, product in enumerate(catalog):
@@ -256,13 +239,12 @@ class ConsoleGame(AbstractGame):
         bag: list[Food] | list[Medicine],
         catalog: list[Food] | list[Medicine],
     ) -> None:
-        """
-        Покупает товар с витрины и кладёт глубокую копию в сумку
+        """Покупает товар с витрины и кладёт глубокую копию в сумку.
 
-        :param bag: сумка игрока
-        :param catalog: витрина товаров
-        :return: None
-        :raises NotEnoughMoney: если не хватает монет, ошибка ловится внутри
+        :param bag: сумка игрока.
+        :param catalog: витрина товаров.
+        :return: None.
+        :raises NotEnoughMoney: если не хватает монет, ошибка ловится внутри.
         """
         while True:
             product_index = self._ask_index(catalog)
@@ -286,11 +268,10 @@ class ConsoleGame(AbstractGame):
             return
 
     def _ask_index(self, catalog: list[Food] | list[Medicine]) -> int | None:
-        """
-        Спрашивает номер товара в каталоге
+        """Спрашивает номер товара в каталоге.
 
-        :param catalog: список, из которого выбирают
-        :return: индекс товара или None при отмене
+        :param catalog: список, из которого выбирают.
+        :return: индекс товара или None при отмене.
         """
         while True:
             number = self._get_number()
@@ -306,10 +287,9 @@ class ConsoleGame(AbstractGame):
             return index
 
     def _get_number(self) -> int:
-        """
-        Читает неотрицательное целое число из ввода
+        """Читает неотрицательное целое число из ввода.
 
-        :return: введённое число
+        :return: введённое число.
         """
         while True:
             number = input("Введите: ")
